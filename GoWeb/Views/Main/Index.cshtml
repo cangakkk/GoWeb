@@ -1,0 +1,91 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using GoWeb.Models
+
+@{
+}
+
+<div class="card">
+    <div class="card-header font-weight-bold">
+        Data Pengguna
+    </div>
+    <div class="card-body">
+        <form id="frmFind" asp-action="Index">
+        <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-light" id="btnAdd">Add</button>
+            <div class="input-group w-50">
+                <input name="Name" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" value="@ViewBag.Name">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search" id="btnFind"></i> </button>
+            </div>
+        </div>
+        </form>
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th class="col-1">Id</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th class="col-3">Address</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            @if(Model.Count == 0)
+            {
+                <tr>
+                    <td colspan="5">Belum ada data yang bisa ditampilkan</td>
+                </tr>
+            }
+            else
+            {
+            @foreach (VMView data in Model)
+            {
+                        <tr>
+                            <th scope="row">@data.Id</th>
+                            <td>@data.Name</td>
+                            <td>@data.Email</td>
+                            <td>@data.Address</td>
+                            <td>
+                                <button class="btn btn-success btnEdit" data-dataid="@data.Id" type="button">Edit</button>
+                                @*<button class="btn btn-primary btnDetail" data-dataid="@data.Id" type="submit">Detail</button>*@
+                                <button class="btn btn-danger btnDelete" data-dataid="@data.Id" type="submit"><i class="fas fa-trash-alt"></i> Delete</button>
+                            </td>
+                        </tr>
+            }
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnAdd").click(function () {
+            $("#MyModalBody").load("/Main/Add");
+            $("#MyModal").modal("show");
+        });
+
+         $("#btnFind").click(function () {
+            $("#frmFind").submit();
+        });
+
+        $(".btnEdit").click(function () {
+            var dataid = $(this).data("dataid");
+            $("#MyModalBody").load("/Main/Edit?dataid=" + dataid);
+            $("#MyModal").modal("show");
+        });
+
+        $(".btnDelete").click(function () {
+            var dataid = $(this).data("dataid");
+            $("#MyModalBody").load("/Main/Delete?dataid=" + dataid);
+            $("#MyModal").modal("show");
+        });
+
+        $(".btnDetail").click(function () {
+            var dataid = $(this).data("dataid");
+            $("#MyModalBody").load("/Main/Detail?dataid=" + dataid);
+            $("#MyModal").modal("show");
+        });
+    });
+</script>
